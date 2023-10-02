@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Js Clock</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootswatch.min.css">
+    <style>
+        .clock-container{
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid bg-dark">
+        <div class="row justify-content-center align-items-center vh-100 ">
+            <div class="col-6">
+                <div class="clock-container bg-primary p-3 shadow shadow-lg">
+                    <h3 class="text-center text-uppercase ">Timer</h3>
+                    <h1 class="date text-center font-monospace" id="date">00:00:00</h1>
+                    <div class="btn-group d-flex justify-content-around mt-3">
+                        <button class="btn btn-success p-3" id="start">Start</button>
+                        <button class="btn btn-danger p-3" id="stop">Stop</button>
+                        <button class="btn btn-warning p-3" id="reset">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="assets/jquery/jquery.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        let hour = 0;
+        let minute = 0;
+        let second = 0;
+        let marker;
+
+        document.getElementById("start").addEventListener("click",start);
+        document.getElementById("stop").addEventListener("click",stop);
+        document.getElementById("reset").addEventListener("click",reset);
+
+        // for start button
+        function start(){
+            $("#stop").removeAttr("disabled");
+            $("#reset").removeAttr("disabled");
+            marker =setInterval(timeMaker,1000);
+            $("#start").attr("disabled","");
+        }
+        // to count time
+        function timeMaker(){
+            if (second<60) {
+                second += 1;
+                if (second == 60) {
+                    minute += 1;
+                    second = 0;
+                }
+                if (minute == 60) {
+                    hour += 1;
+                    minute = 0;
+                }
+                let checkHour = checkTime(hour);
+                let checkMinute = checkTime(minute);
+                let checkSecond = checkTime(second);
+                $("#date").html(`${checkHour}:${checkMinute}:${checkSecond}`);
+            }
+        }
+
+        // for stop button
+        function stop(){
+            $("#start").removeAttr("disabled");
+            $("#reset").removeAttr("disabled");
+            clearInterval(marker);
+            $("#stop").attr("disabled","");
+        }
+
+        // for reset button
+        function reset(){
+            $("#start").removeAttr("disabled");
+            $("#stop").removeAttr("disabled");
+            hour=0;
+            minute=0;
+            second=0;
+            let checkHour = checkTime(hour);
+            let checkMinute = checkTime(minute);
+            let checkSecond = checkTime(second);
+            clearInterval(marker);
+            $("#date").html(`${checkHour}:${checkMinute}:${checkSecond}`);
+            $("#reset").attr("disabled","");
+        }
+
+        //to make only 1 digit to add with 0 eg.01,02
+        function checkTime(i){
+            if (i < 10){
+                i = '0'+i;
+            }else{
+                i = i;
+            }
+            return i;
+        }
+    </script>
+</body>
+</html>
